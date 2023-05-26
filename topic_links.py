@@ -19,7 +19,7 @@ def send(content):
     result = client.send_message(request)
 
 def handle_message(msg):
-    TOPIC_LINK_RE = "(\#\*\*.*?\*\*)"
+    TOPIC_LINK_RE = "(\#\*\*.*>.*?\*\*)"
 
     content = msg["content"]
     if "#**" in content and not "links to" in content:
@@ -39,7 +39,7 @@ def watch_messages():
     print("Watching for messages...")
     def handle_event(event):
         if "message" not in event:
-            print(event)
+            # ignore heartbeat events
             return
         handle_message(event["message"])
 
