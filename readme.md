@@ -1,6 +1,6 @@
 These are examples on how to use the Zulip API.
 
-See https://zulip.com/api/ for Zulip API docs.
+See https://zulip.com/api/rest for Zulip API docs.
 
 They are provided on an as-is basis.  You will typically need to read
 the small programs line-by-line just to make sure you are comfortable
