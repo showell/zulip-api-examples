@@ -40,6 +40,7 @@ def watch_messages():
     def handle_event(event):
         handle_message(event["message"])
 
+    # https://zulip.com/api/real-time-events
     client.call_on_each_event(handle_event, event_types=["message"], all_public_streams=True)
 
 def get_recent_messages():
