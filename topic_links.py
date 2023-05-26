@@ -38,6 +38,9 @@ def handle_message(msg):
 def watch_messages():
     print("Watching for messages...")
     def handle_event(event):
+        if "message" not in event:
+            print(event)
+            return
         handle_message(event["message"])
 
     # https://zulip.com/api/real-time-events
