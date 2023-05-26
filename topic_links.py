@@ -19,7 +19,7 @@ def send(content):
     result = client.send_message(request)
 
 def handle_message(msg):
-    TOPIC_LINK_RE = "(\#\*\*.*>.*?\*\*)"
+    TOPIC_LINK_RE = "(\#\*\*.*?>.*?\*\*)"
 
     content = msg["content"]
     if "#**" in content and not "links to" in content:
