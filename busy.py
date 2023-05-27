@@ -19,7 +19,7 @@ def handle_message(msg):
     link = f"#**{stream}>{topic}**"
 
     content = f"""
-I saw that recently mentioned me on {link} with
+I saw that you recently mentioned me on {link} with
 the message of "{message}".  You must have clicked a button, and Zulip
 must have sent an automated reply **from** you.
 
