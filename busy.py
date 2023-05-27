@@ -12,6 +12,10 @@ def handle_message(msg):
         return
 
     message = msg["content"]
+
+    if "@**" not in message:
+        return
+
     topic = msg["subject"]
     stream = msg["display_recipient"]
     link = f"#**{stream}>{topic}**"
@@ -44,21 +48,5 @@ def watch_messages():
 
     # https://zulip.com/api/real-time-events
     client.call_on_each_event(handle_event, event_types=["message"])
-
-def get_recent_messages():
-    # Use this as alternative to watch_messages if you want to create links for some recent
-    # messages.
-    narrow = [dict(operator="streams", operand="public"), dict(operator="is", operand="mentioned")]
-    request = dict(
-        anchor="newest",
-        apply_markdown=False,
-        narrow=narrow,
-        num_after=0,
-        num_before=30,
-    )
-    result = client.get_messages(request)
-
-    for message in result["messages"]:
-        handle_message(message)
 
 watch_messages()
