@@ -13,9 +13,6 @@ def handle_message(msg):
 
     message = msg["content"]
 
-    if "@**" not in message:
-        return
-
     topic = msg["subject"]
     stream = msg["display_recipient"]
     link = f"#**{stream}>{topic}**"
@@ -44,6 +41,9 @@ def watch_messages():
         if "message" not in event:
             # ignore heartbeat events
             return
+        if "mentioned" not in event["flags"]:
+            return
+
         handle_message(event["message"])
 
     # https://zulip.com/api/real-time-events
