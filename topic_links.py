@@ -19,6 +19,10 @@ def send(content):
     result = client.send_message(request)
 
 def handle_message(msg):
+    if msg["type"] != "stream":
+        print("ignoring DM")
+        return
+
     TOPIC_LINK_RE = "(\#\*\*.*?>.*?\*\*)"
 
     content = msg["content"]
