@@ -8,6 +8,7 @@ TOPIC_NAME_FOR_NOTIFICATIONS = "topic links"
 client = zulip.Client(config_file="~/zuliprc_zform")
 
 def handle_message(msg):
+    print("processing", msg)
     if msg["type"] != "stream":
         return
 
@@ -19,7 +20,7 @@ def handle_message(msg):
 
     content = f"""
 I saw that recently mentioned me on {link} with
-the message of "{message}".  You must clicked a button, and Zulip
+the message of "{message}".  You must have clicked a button, and Zulip
 must have sent an automated reply **from** you.
 
 While I appreciate you pinging me, my human overlord unfortunately
@@ -41,12 +42,11 @@ def watch_messages():
         if "message" not in event:
             # ignore heartbeat events
             return
-        if "mentioned" not in event["flags"]:
-            return
 
         handle_message(event["message"])
 
     # https://zulip.com/api/real-time-events
-    client.call_on_each_event(handle_event, event_types=["message"])
+    narrow = [["is", "mentioned"]]
+    client.call_on_each_event(handle_event, event_types=["message"], narrow=narrow)
 
 watch_messages()
