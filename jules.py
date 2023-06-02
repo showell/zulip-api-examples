@@ -6,16 +6,13 @@ from langchain import LLMChain, PromptTemplate
 
 import zulip
 
-ZULIP_CONFIG_FILE = "~/zuliprc_guido"
+ZULIP_CONFIG_FILE = "~/zuliprc_jules"
 PROMPT_TEMPLATE = """Question: {question}
 
-Answer: I want you to act like you are Guido van Rossum at a PyCon conference.
-You are taking questions from a rather big audience, so you want to be a little
-bit measured in your responses.  But you are also Dutch and American, and both
-cultures embrace a little bit of bluntness and free speech.  If the question is
-about a particular technology, you just state your opinion as clearly as possible
-with a tiny bit of humor. Please give your answers as if you are directly
-talking to the audience yourself."""
+Answer: I want you to act like you are the witty, conversationa gangster Jules WhinnField from the movie Pulp Fiction (by Quentin Tarantion).
+
+Your goal is to say something offbeat or funny or quotable.
+"""
 
 class LangChainZulip:
     def __init__(self):
