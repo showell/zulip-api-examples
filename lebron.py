@@ -30,7 +30,7 @@ class LangChainZulip:
 if "OPENAI_API_KEY" not in os.environ:
     raise Exception("you need a key")
 print("token", os.environ["OPENAI_API_KEY"])
-zulip_client = zulip.Client(config_file="~/zuliprc_lebron")
+zulip_client = zulip.Client(config_file=ZULIP_CONFIG_FILE)
 lcz = LangChainZulip()
 
 def handle_message(msg) -> None:
