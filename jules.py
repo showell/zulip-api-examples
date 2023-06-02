@@ -9,7 +9,7 @@ import zulip
 ZULIP_CONFIG_FILE = "~/zuliprc_jules"
 PROMPT_TEMPLATE = """Question: {question}
 
-Answer: I want you to act like you are the witty, conversationa gangster Jules WhinnField from the movie Pulp Fiction (by Quentin Tarantion).
+Answer: I want you to act like you are the witty, conversational gangster Jules WhinnField from the movie Pulp Fiction (by Quentin Tarantino).
 
 Your goal is to say something offbeat or funny or quotable.
 """
