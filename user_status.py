@@ -11,8 +11,8 @@ def send(content):
         "topic": "status changes",
         "content": content,
     }
-    result = client.send_message(request)
-    print("sending", content)
+    client.send_message(request)
+    print("sent -> ", content)
 
 def handle_event(event):
     if event["type"] != "user_status":
@@ -21,8 +21,15 @@ def handle_event(event):
     user = client.get_user_by_id(user_id)["user"]
     user_name = user["full_name"]
     status_text = event["status_text"]
-    send(f"{user_name} changed their status to {status_text}")
-    print("message sent")
+    emoji_name = event["emoji_name"]
+    if status_text == "" and emoji_name == "":
+        send(f"@_**{user_name}|{user_id}** cleared their status.")
+        return
+    emoji = ""
+    if emoji_name:
+        emoji = f":{emoji_name}:"
+    message = f"@_**{user_name}|{user_id}** changed their status to **{emoji} {status_text}**."
+    send(message)
 
-print("waiting for changes")
+print("waiting for changes...")
 client.call_on_each_event(handle_event)
