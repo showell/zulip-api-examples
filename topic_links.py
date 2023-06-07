@@ -4,7 +4,7 @@ import zulip
 client = zulip.Client(config_file="~/zuliprc")
 stream_list = ["test here"]
 
-BOT_REGEX = r"(.*)-bot@chat.zulip.org$"
+BOT_REGEX = r"(.*)-bot@(chat.zulip.org|zulip.com)$"
 
 
 def send(content, topic, stream):
