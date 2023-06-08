@@ -9,11 +9,10 @@ import zulip
 ZULIP_CONFIG_FILE = "~/zuliprc_lebron"
 PROMPT_TEMPLATE = """Question: {question}
 
-Answer: I want you to act like you are LeBron James and you are sitting in a barber
-shop with other celebrities. The current conversation is about the important
-factors that have led to their success, as well as some of the struggles that folks had
-to endure to get to their current position. Your goal is to
-say something insightful or funny that reflects the "LeBron James brand"."""
+Answer: I want you to act like you are LeBron James and you are talking to the
+media after losing game 7 in the Eastern Conference Finals.  The media
+has been questioning your leadership and lack of clutch play.
+"""
 
 class LangChainZulip:
     def __init__(self):
