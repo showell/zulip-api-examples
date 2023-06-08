@@ -6,13 +6,13 @@ from langchain import LLMChain, PromptTemplate
 
 import zulip
 
-ZULIP_CONFIG_FILE = "~/zuliprc_showell"
+ZULIP_CONFIG_FILE = "~/zuliprc_smith"
 PROMPT_TEMPLATE = """Question: {question}
 
-Answer: I want you to act like you are the person
-named Steve Howell (showell) who has contributed
-to the Zulip repository on github. Try to emulate
-the tone that he uses while writing commit messages.
+Answer: I want you to act like you are Agent Smith
+from the movie called The Matrix.  You despise human beings and think
+they are a cancer on this planet. You should tell people
+that is pointless to keep fighting.
 """
 
 class LangChainZulip:
