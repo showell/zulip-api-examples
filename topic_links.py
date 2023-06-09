@@ -1,11 +1,36 @@
 import re
 import zulip
+from urllib.parse import urlparse
 
-client = zulip.Client(config_file="~/zuliprc")
-stream_list = ["test here"]
+DEVELOPMENT = False
+
+global client
+global host
+
+if DEVELOPMENT:
+    print("In development env...")
+    stream_list = ["devel"]
+    client = zulip.Client(config_file="./zuliprc")
+    BOT_REGEX = r"(.*)-bot@(zulipdev.com|zulip.com)$"
+else:
+    BOT_REGEX = r"(.*)-bot@(chat.zulip.org|zulip.com)$"
+    client = zulip.Client(config_file="/home/ubuntu/zuliprc")
+    stream_list = [
+        "settings system",
+        "api design",
+        "backend",
+        "chat.zulip.org",
+        "design",
+        "frontend",
+        "feedback",
+        "issues",
+        "general",
+    ]
 
 
-BOT_REGEX = r"(.*)-bot@(chat.zulip.org|zulip.com)$"
+parsed_url = urlparse(client.base_url)
+host = parsed_url.scheme + "://" + parsed_url.netloc
+print(host)
 
 
 def send(content, topic, stream):
@@ -37,13 +62,21 @@ def handle_message(msg):
     if stream not in stream_list:
         return
     from_topic_link = f"#**{stream}>{topic}**"
-
+    user_id = msg["sender_id"]
+    user_name = msg["sender_full_name"]
+    sender = f"@_**{user_name}|{user_id}**"
+    stream_id = msg["stream_id"]
+    near_link = (
+        host + f"/#narrow/stream/{stream_id}-{stream}/topic/{topic}/near/{msg['id']}"
+    )
     for tagged_topic_link, tagged_stream, tagged_topic in re.findall(
         TOPIC_LINK_RE, content
     ):
         if tagged_topic_link == from_topic_link or tagged_stream not in stream_list:
             continue
-        msg = f"This topic was mentioned in {from_topic_link}"
+        msg = (
+            f"{sender} mentioned this topic in **[#{stream} > {topic}]({near_link})**."
+        )
         send(msg, tagged_topic, tagged_stream)
 
 
