@@ -1,6 +1,6 @@
 import re
 import zulip
-from urllib.parse import urlparse
+from urllib import parse
 
 DEVELOPMENT = False
 
@@ -9,7 +9,7 @@ global host
 
 if DEVELOPMENT:
     print("In development env...")
-    stream_list = ["devel"]
+    stream_list = ["devel dev #@-)"]
     client = zulip.Client(config_file="./zuliprc")
     BOT_REGEX = r"(.*)-bot@(zulipdev.com|zulip.com)$"
 else:
@@ -28,9 +28,21 @@ else:
     ]
 
 
-parsed_url = urlparse(client.base_url)
+def encode_hash_component(id):
+    return parse.quote(id)
+
+
+parsed_url = parse.urlparse(client.base_url)
 host = parsed_url.scheme + "://" + parsed_url.netloc
 print(host)
+
+
+def get_near_link(msg_id, stream_id, stream_name, topic):
+    stream_name = stream_name.replace(" ", "-")
+    msg_id = encode_hash_component(str(msg_id))
+    stream_slug = encode_hash_component(f"{stream_id}-{stream_name}")
+    topic_slug = encode_hash_component(topic)
+    return host + f"/#narrow/stream/{stream_slug}/topic/{topic_slug}/near/{msg_id}"
 
 
 def send(content, topic, stream):
@@ -57,18 +69,21 @@ def handle_message(msg):
     content = msg["content"]
 
     stream = msg["display_recipient"]
+    stream_id = msg["stream_id"]
     topic = msg["subject"]
 
     if stream not in stream_list:
         return
+
     from_topic_link = f"#**{stream}>{topic}**"
     user_id = msg["sender_id"]
     user_name = msg["sender_full_name"]
+
     sender = f"@_**{user_name}|{user_id}**"
-    stream_id = msg["stream_id"]
-    near_link = (
-        host + f"/#narrow/stream/{stream_id}-{stream}/topic/{topic}/near/{msg['id']}"
-    )
+
+    msg_id = msg["id"]
+
+    near_link = get_near_link(msg_id, stream_id, stream, topic)
     for tagged_topic_link, tagged_stream, tagged_topic in re.findall(
         TOPIC_LINK_RE, content
     ):
@@ -91,23 +106,6 @@ def watch_messages():
     client.call_on_each_event(
         handle_event, event_types=["message"], all_public_streams=True
     )
-
-
-def get_recent_messages():
-    # Use this as alternative to watch_messages if you want to create links for some recent
-    # messages.
-    narrow = [dict(operator="streams", operand="public")]
-    request = dict(
-        anchor="newest",
-        apply_markdown=False,
-        narrow=narrow,
-        num_after=0,
-        num_before=20,
-    )
-    result = client.get_messages(request)
-
-    for message in result["messages"]:
-        handle_message(message)
 
 
 watch_messages()
